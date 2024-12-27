@@ -9,6 +9,7 @@ class TradingExchange:
         self.session = async_session()
 
     async def add_data(self, data: list[dict[str, str | int]]) -> None:
+        print('Starting data transfering from local storage to DB...')
         for i in data:
             stmt = insert(TradingResult).values(
                 exchange_product_id=i['exchange_product_id'],
@@ -25,10 +26,10 @@ class TradingExchange:
             try:
                 await self.session.execute(stmt)
                 await self.session.commit()
-            except Exception as err:
-                print('Error adding data to DB...', err)
+            except Exception as error:
+                print('Error adding data to DB...', error)
                 continue
             finally:
                 await self.session.close()
 
-        print('All data are successfully added to DB...')
+        print('All data is successfully added to DB...')

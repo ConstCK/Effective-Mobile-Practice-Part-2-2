@@ -13,17 +13,16 @@ db_service = TradingExchange()
 async def main():
     await delete_tables()
     await create_tables()
-    try:
-        await my_parser.get_xls_urls(2023)
-        await my_parser.get_xls_data()
-        result = await my_parser.get_all_data()
-        await db_service.add_data(result)
-    except Exception as error:
-        print('!!!', error)
+
+    await my_parser.get_xls_urls(2023)
+    await my_parser.get_xls_data()
+    result = await my_parser.get_all_data()
+    await db_service.add_data(result)
 
 
 if __name__ == '__main__':
     try:
         asyncio.run(main())
-    except Exception:
-        print('There are some app problems...exiting program...')
+    except Exception as error:
+        print(
+            f'There are some app problems...exiting program...Error description: {error}')

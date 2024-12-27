@@ -19,9 +19,11 @@ class DataService:
         objects = objects[[1, 2, 3, 4, 5, 14]][objects[14] != '-'].dropna()
         # Удаление ненужных строк
         objects = objects.drop(objects[objects[1].str.len() != 11].index)
+
         # приведение данных некоторых столбцов к нужному типу
         objects = objects.astype(
             {4: 'int64', 5: 'float64', 14: 'int64'}, errors='ignore')
+
         # Добавление необходимых столбцов
         objects[15] = date
         objects[16] = objects[1].str[:4]
