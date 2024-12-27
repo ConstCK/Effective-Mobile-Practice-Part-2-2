@@ -21,7 +21,7 @@ class Parser:
         page = 0
         data_year = datetime.datetime.now().year
         print('Receiving data files urls...')
-        while limit <= data_year and page < 3:
+        while limit <= data_year:
             page += 1
             r = requests.get(f'{self.url}?page=page-{page}')
             soup = BeautifulSoup(r.content, 'html.parser')
@@ -52,9 +52,9 @@ class Parser:
                 objects = self.service.get_data_from_xls(r.content)
                 try:
                     objects = self.service.clean_table(objects, current_date)
+                    self.service.buffer_data(objects)
                 except Exception as err:
                     print('Table refactoring error...', err)
-                self.service.buffer_data(objects)
 
     async def get_all_data(self) -> list[dict[str, str | int]]:
         return await self.service.get_buffer_data()

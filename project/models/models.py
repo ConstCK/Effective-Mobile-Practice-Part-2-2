@@ -1,4 +1,5 @@
 import datetime
+import decimal
 from sqlalchemy import UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -15,7 +16,7 @@ class TradingResult(Base):
     delivery_basis_name: Mapped[str]
     delivery_type_id: Mapped[str]
     volume: Mapped[int]
-    total: Mapped[int]
+    total: Mapped[decimal.Decimal]
     count: Mapped[int]
     date: Mapped[datetime.datetime]
     created_on: Mapped[datetime.datetime] = mapped_column(

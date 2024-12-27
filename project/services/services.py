@@ -19,14 +19,15 @@ class DataService:
         objects = objects[[1, 2, 3, 4, 5, 14]][objects[14] != '-'].dropna()
         # Удаление ненужных строк
         objects = objects.drop(objects[objects[1].str.len() != 11].index)
+        # приведение данных некоторых столбцов к нужному типу
+        objects = objects.astype(
+            {4: 'int64', 5: 'float64', 14: 'int64'}, errors='ignore')
         # Добавление необходимых столбцов
         objects[15] = date
         objects[16] = objects[1].str[:4]
         objects[17] = objects[1].str[4:7]
         objects[18] = objects[1].str[-1]
-        # приведение данных некоторых столбцов к нужному типу
-        objects = objects.astype(
-            {4: 'int64', 5: 'int64', 14: 'int16'}, errors='ignore')
+
         # Финальное переименование столбцов DataFrame
         objects.columns = [
             'exchange_product_id',
@@ -63,4 +64,3 @@ class DataService:
             self.buffer.extend(buffer_data)
         except Exception:
             print('Data buffering error...')
-

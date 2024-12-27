@@ -18,7 +18,7 @@ class TradingExchange:
                 delivery_basis_name=i['delivery_basis_name'],
                 delivery_type_id=i['delivery_type_id'],
                 volume=i['volume'],
-                total=i['total'],
+                total=int(i['total']),
                 count=i['count'],
                 date=i['date'],
             )
