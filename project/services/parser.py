@@ -5,6 +5,7 @@ import pandas
 import requests
 from bs4 import BeautifulSoup
 
+from config import SELECTED_CLASS, BASE_URL
 from services.services import DataService
 
 
@@ -20,13 +21,13 @@ class Parser:
         page = 0
         data_year = datetime.datetime.now().year
         print('Receiving data files urls...')
-        while limit <= data_year and page < 2:
+        while limit <= data_year and page < 3:
             page += 1
             r = requests.get(f'{self.url}?page=page-{page}')
             soup = BeautifulSoup(r.content, 'html.parser')
 
             raw_data = soup.find_all('a',
-                                     class_='accordeon-inner__item-title link xls')[:10]
+                                     class_=SELECTED_CLASS)[:10]
             data = [x['href'] for x in raw_data]
 
             for i in data:
@@ -37,12 +38,14 @@ class Parser:
 
         return self.xls_urls
 
-    async def get_xls_data(self):
-        """Сохранение данных в локальный буфер"""
+    async def get_xls_data(self) -> None:
+        """Получение данных с удаленного excel файла с сохранением в локальный буфер"""
+
         for item in self.xls_urls:
             for key, value in item.items():
-                current_date = datetime.date.fromisoformat(f'{key[:4]}-{key[4:6]}-{key[6:]}')
-                current_url = f'https://spimex.com{value}'
+                current_date = datetime.date.fromisoformat(
+                    f'{key[:4]}-{key[4:6]}-{key[6:]}')
+                current_url = f'{BASE_URL}{value}'
                 print(f'Adding data to local storage from {current_url}... ')
                 r = requests.get(current_url)
 
@@ -53,4 +56,5 @@ class Parser:
                     print('Table refactoring error...', err)
                 self.service.buffer_data(objects)
 
-        return self.service.get_buffer_data()
+    async def get_all_data(self) -> list[dict[str, str | int]]:
+        return await self.service.get_buffer_data()

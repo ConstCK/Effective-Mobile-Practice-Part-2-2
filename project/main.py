@@ -1,27 +1,26 @@
 import asyncio
 
 from config import MAIN_URL
-from services.initial_tasks import create_tables
+from crud.crud import TradingExchange
+from services.initial_tasks import create_tables, delete_tables
 from services.parser import Parser
+from services.services import DataService
 
-
-my_service = Parser(MAIN_URL)
+my_parser = Parser(MAIN_URL)
+db_service = TradingExchange()
 
 
 async def main():
-    # запуск функции с созданием всех таблиц в БД
+    await delete_tables()
     await create_tables()
-    await my_service.get_xls_urls(2024)
-    await my_service.get_xls_data()
-    result = await my_service.get_xls_data()
-    print(result)
-
+    await my_parser.get_xls_urls(2024)
+    await my_parser.get_xls_data()
+    result = await my_parser.get_all_data()
+    await db_service.add_data(result)
 
 
 if __name__ == '__main__':
     try:
         asyncio.run(main())
     except Exception:
-        print('There are some problems running application...exiting program...')
-    # my_service.get_xls_urls(2024)
-    # my_service.get_xls_data()
+        print('There are some app problems...exiting program...')
