@@ -1,18 +1,21 @@
 import asyncio
 
+from config import MAIN_URL
+from services.initial_tasks import create_tables
 from services.parser import Parser
-from services.services import create_tables
 
-my_service = Parser('https://spimex.com/markets/oil_products/trades/results/')
+
+my_service = Parser(MAIN_URL)
 
 
 async def main():
-    #     # запуск функции с созданием всех таблиц в БД
-    #     # await create_tables()
+    # запуск функции с созданием всех таблиц в БД
+    await create_tables()
     await my_service.get_xls_urls(2024)
     await my_service.get_xls_data()
-    result = await my_service.get_buffer_data()
+    result = await my_service.get_xls_data()
     print(result)
+
 
 
 if __name__ == '__main__':
