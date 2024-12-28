@@ -25,4 +25,7 @@ class TradingResult(Base):
                                                           server_default=func.now(),
                                                           onupdate=func.now())
 
+    def __repr__(self) -> str:
+        return f'{self.exchange_product_id}'
+
     __table_args__ = (UniqueConstraint('date', 'exchange_product_id'),)
