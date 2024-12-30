@@ -2,6 +2,7 @@ import asyncio
 
 from config import MAIN_URL
 from crud.crud import TradingExchange
+from services.initial_tasks import create_tables
 from services.parser import Parser
 
 
@@ -10,6 +11,7 @@ db_service = TradingExchange()
 
 
 async def main():
+    await create_tables()
     await my_parser.get_xls_urls(2023)
     await my_parser.get_xls_data()
     result = await my_parser.get_all_data()
