@@ -8,7 +8,6 @@ from db.db import async_engine
 class DataService:
     def __init__(self) -> None:
         self.buffer: list[dict[str, str | int]] = list()
-        self.engine = async_engine
 
     @staticmethod
     def clean_table(objects: pandas.DataFrame, date: datetime.date) -> pandas.DataFrame:

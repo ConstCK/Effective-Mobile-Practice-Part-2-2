@@ -1,7 +1,5 @@
 import datetime
-import io
 
-import pandas
 import requests
 from bs4 import BeautifulSoup
 
